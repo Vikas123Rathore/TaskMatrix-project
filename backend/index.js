@@ -7,6 +7,7 @@ import { connectDB } from "./config/db.js";
 
 dotenv.config();
 import userRouter from "./routes/userRoute.js";
+import taskRouter from "./routes/taskRoute.js";
 const app = express();
 
 // Middleware
@@ -29,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", userRouter);
-
+app.use("/api/tasks", taskRouter);
 
 const PORT = process.env.PORT || 8000;
 

@@ -37,6 +37,15 @@ export const registerUser = async (req, res) => {
     // Generate JWT
     const token = generateToken(user._id);
 
+    console.log("Generated Token:", token);
+    console.log("Token Type:", typeof token);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     // Store JWT in HttpOnly cookie
     res.cookie("token", token, {
       httpOnly: true,
@@ -99,6 +108,16 @@ export const loginUser = async (req, res) => {
 
     // Generate JWT
     const token = generateToken(user._id);
+
+    console.log("Generated Token:", token);
+    console.log("Token Type:", typeof token);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     // Store JWT in HttpOnly cookie
     res.cookie("token", token, {
