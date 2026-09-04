@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 
 dotenv.config();
-
+import userRouter from "./routes/userRoute.js";
 const app = express();
 
 // Middleware
@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
   });
 });
 
-
+app.use("/api/auth", userRouter);
 
 
 const PORT = process.env.PORT || 8000;
