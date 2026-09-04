@@ -37,10 +37,17 @@ export const registerUser = async (req, res) => {
     // Generate JWT
     const token = generateToken(user._id);
 
+    // Store JWT in HttpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    console.log("Cookie:", req.cookies);
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
-      token,
       user: {
         id: user._id,
         name: user.name,
@@ -56,7 +63,6 @@ export const registerUser = async (req, res) => {
     });
   }
 };
-
 
 export const loginUser = async (req, res) => {
   try {
@@ -78,7 +84,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // Compare entered password with hashed password
+    // Compare password
     const isPasswordCorrect = await bcrypt.compare(
       password,
       user.password
@@ -94,10 +100,17 @@ export const loginUser = async (req, res) => {
     // Generate JWT
     const token = generateToken(user._id);
 
+    // Store JWT in HttpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         name: user.name,
