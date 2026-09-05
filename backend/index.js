@@ -35,10 +35,13 @@ app.use("/api/tasks", taskRouter);
 const PORT = process.env.PORT || 8000;
 
 const startServer = async () => {
-  await connectDB()
+  await connectDB();
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 };
 
-startServer();
+startServer().catch((error) => {
+  console.error("Server startup failed:", error.message);
+  process.exit(1);
+});
