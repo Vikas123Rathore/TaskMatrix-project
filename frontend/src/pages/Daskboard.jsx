@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import {
   User,
   Mail,
@@ -9,62 +8,22 @@ import {
   Search,
   LogOut,
 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import api from '../api/axios'
+
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 const Dashboard = () => {
-  const navigate = useNavigate()
+  const { userData, logout, actionLoading } = useContext(AuthContext)
 
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  // Get current logged-in user
-  const getCurrentUser = async () => {
-    try {
-      const response = await api.get('/auth/current-user')
-
-      if (response.data.success) {
-        setUser(response.data.user)
-      }
-      console.log('data', response.data)
-    } catch (error) {
-      console.error('Current user error:', error)
-
-      // If token is missing/invalid
-      if (error.response?.status === 401) {
-        navigate('/login')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getCurrentUser()
-  }, [])
-
-  // Logout
-  const handleLogout = async () => {
-    try {
-      await api.post('/auth/logout')
-      navigate('/login')
-    } catch (error) {
-      console.error('Logout failed:', error)
-    }
-  }
-
-  // Loading
-  if (loading) {
+  // =========================
+  // INITIAL LOADING
+  // =========================
+  if (!userData) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <p className="text-slate-500">Loading dashboard...</p>
       </div>
     )
-  }
-
-  // User not found
-  if (!user) {
-    return null
   }
 
   return (
@@ -95,12 +54,15 @@ const Dashboard = () => {
 
           {/* Logout */}
           <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition duration-200 cursor-pointer"
+            onClick={logout}
+            disabled={actionLoading}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <LogOut size={18} />
 
-            <span className="hidden sm:block font-medium">Logout</span>
+            <span className="hidden sm:block font-medium">
+              {actionLoading ? 'Logging out...' : 'Logout'}
+            </span>
           </button>
         </div>
       </nav>
@@ -110,7 +72,7 @@ const Dashboard = () => {
         {/* Welcome */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight capitalize">
-            Welcome, {user.name} 👋
+            Welcome, {userData.name} 👋
           </h1>
 
           <p className="text-slate-500 mt-2">
@@ -146,7 +108,9 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm text-slate-500">Name</p>
 
-                <p className="font-medium text-slate-900 mt-0.5 capitalize">{user.name}</p>
+                <p className="font-medium text-slate-900 mt-0.5 capitalize">
+                  {userData.name}
+                </p>
               </div>
             </div>
 
@@ -160,7 +124,7 @@ const Dashboard = () => {
                 <p className="text-sm text-slate-500">Email</p>
 
                 <p className="font-medium text-slate-900 mt-0.5">
-                  {user.email}
+                  {userData.email}
                 </p>
               </div>
             </div>

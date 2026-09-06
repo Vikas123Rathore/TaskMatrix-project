@@ -1,31 +1,15 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
-import Auth from './pages/Auth'
+import { useContext } from 'react'
+
 import Dashboard from './pages/Daskboard'
-import api from './api/axios'
+import Login from './pages/Login'
+import Register from './pages/Register'
+
+import { AuthContext } from './context/AuthContext'
 
 function App() {
-  const [userData, setUserData] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  const getUserData = async () => {
-    try {
-      const response = await api.get('/auth/current-user')
-
-      if (response.data.success) {
-        setUserData(response.data.user)
-      }
-    } catch (error) {
-      setUserData(null)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    getUserData()
-  }, [])
+  const { userData, loading } = useContext(AuthContext)
 
   if (loading) {
     return (
@@ -36,39 +20,31 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Login */}
-        <Route
-          path="/login"
-          element={userData ? <Navigate to="/dashboard" replace /> : <Auth />}
-        />
+    <Routes>
+      {/* Login */}
+      <Route
+        path="/login"
+        element={userData ? <Navigate to="/dashboard" replace /> : <Login />}
+      />
 
-        {/* Signup */}
-        <Route
-          path="/signup"
-          element={userData ? <Navigate to="/dashboard" replace /> : <Auth />}
-        />
+      {/* Register */}
+      <Route
+        path="/register"
+        element={userData ? <Navigate to="/dashboard" replace /> : <Register />}
+      />
 
-        {/* Dashboard */}
-        <Route
-          path="/dashboard"
-          element={
-            userData ? (
-              <Dashboard userData={userData} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+      {/* Dashboard */}
+      <Route
+        path="/dashboard"
+        element={userData ? <Dashboard /> : <Navigate to="/login" replace />}
+      />
 
-        {/* Other routes */}
-        <Route
-          path="*"
-          element={<Navigate to={userData ? '/dashboard' : '/login'} replace />}
-        />
-      </Routes>
-    </BrowserRouter>
+      {/* Other routes */}
+      <Route
+        path="*"
+        element={<Navigate to={userData ? '/dashboard' : '/login'} replace />}
+      />
+    </Routes>
   )
 }
 
