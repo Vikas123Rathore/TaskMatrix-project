@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import api from '../api/axios'
 
 export const AuthContext = createContext()
@@ -7,17 +8,11 @@ export const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
 
-  // Sirf app start par auth check ke liye
   const [loading, setLoading] = useState(true)
-
-  // Login/Register/Logout button loading ke liye
   const [actionLoading, setActionLoading] = useState(false)
-
   const [userData, setUserData] = useState(null)
 
-  // =========================
   // GET CURRENT USER
-  // =========================
   const getCurrentUser = async () => {
     try {
       const res = await api.get('/auth/current-user')
@@ -34,9 +29,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // =========================
   // REGISTER
-  // =========================
   const register = async (name, email, password) => {
     try {
       setActionLoading(true)
@@ -47,23 +40,24 @@ export const AuthProvider = ({ children }) => {
         password,
       })
 
-      console.log('Register:', res.data)
-
       if (res.data.success) {
+        toast.success('Account created successfully!')
         navigate('/login')
       }
     } catch (error) {
       console.error('Register Error:', error)
 
-      alert(error.response?.data?.message || 'Registration failed')
+      const message = error.response?.data?.message || 'Registration failed'
+
+      toast.error(message)
+
+      throw error
     } finally {
       setActionLoading(false)
     }
   }
 
-  // =========================
   // LOGIN
-  // =========================
   const login = async (email, password) => {
     try {
       setActionLoading(true)
@@ -73,41 +67,44 @@ export const AuthProvider = ({ children }) => {
         password,
       })
 
-      console.log('Login:', res.data)
-
       if (res.data.success) {
         setUserData(res.data.user)
+
+        toast.success('Login successful!')
 
         navigate('/dashboard')
       }
     } catch (error) {
       console.error('Login Error:', error)
 
-      alert(error.response?.data?.message || 'Login failed')
+      const message = error.response?.data?.message || 'Login failed'
+
+      toast.error(message)
+
+      throw error
     } finally {
       setActionLoading(false)
     }
   }
 
-  // =========================
   // LOGOUT
-  // =========================
   const logout = async () => {
     try {
       setActionLoading(true)
 
       await api.post('/auth/logout')
 
-      // Pehle user ko logout state me lao
       setUserData(null)
 
-      // Phir login page par jao
+      toast.success('Logged out successfully!')
+
       navigate('/login', { replace: true })
     } catch (error) {
       console.error('Logout Error:', error)
 
-      // Even if API fails, local auth state clear kar do
       setUserData(null)
+
+      toast.error('Logout failed')
 
       navigate('/login', { replace: true })
     } finally {
@@ -115,9 +112,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // =========================
   // INITIAL AUTH CHECK
-  // =========================
   useEffect(() => {
     getCurrentUser()
   }, [])
@@ -127,10 +122,8 @@ export const AuthProvider = ({ children }) => {
       value={{
         userData,
         setUserData,
-
         loading,
         actionLoading,
-
         register,
         login,
         logout,

@@ -15,12 +15,6 @@ const TaskDetails = () => {
   }, [id])
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this task?',
-    )
-
-    if (!confirmDelete) return
-
     try {
       await deleteTask(id)
 

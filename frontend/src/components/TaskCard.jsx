@@ -86,14 +86,14 @@ const TaskCard = ({ task }) => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(`/tasks/${task._id}`)}
-            className="text-sm font-medium text-blue-600 hover:text-blue-700"
+            className="text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
           >
             View
           </button>
 
           <button
             onClick={() => navigate(`/tasks/${task._id}/edit`)}
-            className="inline-flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="inline-flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-900 cursor-pointer"
           >
             <Pencil className="w-4 h-4" />
             Edit
@@ -101,7 +101,7 @@ const TaskCard = ({ task }) => {
 
           <button
             onClick={handleDelete}
-            className="inline-flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-700"
+            className="inline-flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-700 cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />
             Delete

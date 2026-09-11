@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
@@ -10,32 +10,27 @@ const projectSchema = new mongoose.Schema(
 
     description: {
       type: String,
+      required: true,
       trim: true,
-      default: '',
     },
 
     status: {
       type: String,
-      enum: ['Pending', 'In Progress', 'Completed'],
-      default: 'Pending',
+      enum: ["Pending", "In Progress", "Completed"],
+      default: "Pending",
     },
 
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    project: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "User",
       required: true,
     },
   },
   {
     timestamps: true,
   }
-)
+);
 
-const Project = mongoose.model('Project', projectSchema)
+const Project = mongoose.model("Project", projectSchema);
 
-export default Project
+export default Project;

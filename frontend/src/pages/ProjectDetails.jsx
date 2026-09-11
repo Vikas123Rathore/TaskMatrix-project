@@ -41,12 +41,6 @@ const ProjectDetails = () => {
 
   // ================= DELETE PROJECT =================
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this project?',
-    )
-
-    if (!confirmDelete) return
-
     try {
       await deleteProject(id)
 
@@ -85,7 +79,7 @@ const ProjectDetails = () => {
 
           <button
             onClick={() => navigate('/projects')}
-            className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-700"
+            className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
           >
             ← Back to Projects
           </button>
@@ -102,7 +96,7 @@ const ProjectDetails = () => {
         {/* ================= BACK BUTTON ================= */}
         <button
           onClick={() => navigate('/projects')}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 transition"
+          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 transition cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Projects
@@ -129,7 +123,7 @@ const ProjectDetails = () => {
               {/* Edit */}
               <button
                 onClick={() => navigate(`/projects/${id}/edit`)}
-                className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition cursor-pointer"
               >
                 <Pencil className="w-4 h-4" />
                 Edit
@@ -138,7 +132,7 @@ const ProjectDetails = () => {
               {/* Delete */}
               <button
                 onClick={handleDelete}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
                 Delete
@@ -269,7 +263,7 @@ const ProjectDetails = () => {
             {/* Create Task Button */}
             <button
               onClick={() => navigate(`/projects/${id}/tasks/create`)}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Create Task
@@ -299,7 +293,7 @@ const ProjectDetails = () => {
 
                 <button
                   onClick={() => navigate(`/projects/${id}/tasks/create`)}
-                  className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-700"
+                  className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
                 >
                   Create your first task →
                 </button>
@@ -366,14 +360,14 @@ const ProjectDetails = () => {
                       <div className="flex items-center gap-4">
                         <button
                           onClick={() => navigate(`/tasks/${task._id}`)}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                          className="text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
                         >
                           View
                         </button>
 
                         <button
                           onClick={() => navigate(`/tasks/${task._id}/edit`)}
-                          className="text-sm font-medium text-slate-600 hover:text-slate-900"
+                          className="text-sm font-medium text-slate-600 hover:text-slate-900 cursor-pointer"
                         >
                           Edit
                         </button>

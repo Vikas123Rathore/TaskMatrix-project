@@ -1,26 +1,31 @@
 import Project from "../models/projectModel.js";
 
-// ================= CREATE PROJECT =================
+// Create Project
 export const projectCreate = async (req, res) => {
   try {
-    const { title, description, status } = req.body;
+    const { projectName, description, status } = req.body;
     const authorId = req.user;
+
     console.log("REQ BODY:", req.body);
     console.log("REQ USER:", req.user);
 
-    if (!title || !description) {
+    // Validation
+    if (!projectName || !description) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "Project name and description are required",
       });
     }
 
+    // Create project
     const project = await Project.create({
-      projectName:title,
+      projectName,
       description,
       status,
       authorId,
     });
+
+    console.log("Project Created:", project._id);
 
     return res.status(201).json({
       success: true,
@@ -44,8 +49,7 @@ export const projectCreate = async (req, res) => {
   }
 };
 
-
-// ================= GET ALL PROJECTS =================
+// Get All Projects
 export const getProjects = async (req, res) => {
   try {
     const authorId = req.user;
@@ -70,8 +74,7 @@ export const getProjects = async (req, res) => {
   }
 };
 
-
-// ================= GET SINGLE PROJECT =================
+// Get Single Project
 export const getProject = async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,8 +108,7 @@ export const getProject = async (req, res) => {
   }
 };
 
-
-// ================= UPDATE PROJECT =================
+// Update Project
 export const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
@@ -136,6 +138,8 @@ export const updateProject = async (req, res) => {
       });
     }
 
+    console.log("Project Updated:", project._id);
+
     return res.status(200).json({
       success: true,
       message: "Project updated successfully",
@@ -152,8 +156,7 @@ export const updateProject = async (req, res) => {
   }
 };
 
-
-// ================= DELETE PROJECT =================
+// Delete Project
 export const deleteProject = async (req, res) => {
   try {
     const { id } = req.params;
@@ -170,6 +173,8 @@ export const deleteProject = async (req, res) => {
         message: "Project not found",
       });
     }
+
+    console.log("Project Deleted:", id);
 
     return res.status(200).json({
       success: true,

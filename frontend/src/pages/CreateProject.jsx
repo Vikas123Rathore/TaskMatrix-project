@@ -6,8 +6,9 @@ import { useProject } from '../context/ProjectContext'
 const CreateProject = () => {
   const navigate = useNavigate()
   const { loading, createProject } = useProject()
+
   const [formData, setFormData] = useState({
-    title: '',
+    projectName: '',
     description: '',
     status: 'Pending',
   })
@@ -21,16 +22,26 @@ const CreateProject = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    console.log('Project Data:', formData)
-    createProject(formData)
-    setFormData({
-      title: '',
-      description: '',
-      status: 'Pending',
-    })
+    try {
+      console.log('Project Data:', formData)
+
+      await createProject(formData)
+
+      console.log('Project Created Successfully')
+
+      setFormData({
+        projectName: '',
+        description: '',
+        status: 'Pending',
+      })
+
+      navigate('/projects')
+    } catch (error) {
+      console.error('Create Project Error:', error)
+    }
   }
 
   return (
@@ -74,8 +85,8 @@ const CreateProject = () => {
 
             <input
               type="text"
-              name="title"
-              value={formData.title}
+              name="projectName"
+              value={formData.projectName}
               onChange={handleChange}
               placeholder="Enter project name"
               required
@@ -95,6 +106,7 @@ const CreateProject = () => {
               onChange={handleChange}
               placeholder="Describe your project..."
               rows="5"
+              required
               className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none resize-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
             />
           </div>
@@ -112,7 +124,9 @@ const CreateProject = () => {
               className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition cursor-pointer"
             >
               <option value="Pending">Pending</option>
+
               <option value="In Progress">In Progress</option>
+
               <option value="Completed">Completed</option>
             </select>
           </div>
@@ -130,7 +144,7 @@ const CreateProject = () => {
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Creating...' : 'Create Project'}
             </button>

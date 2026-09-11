@@ -27,11 +27,15 @@ import {
 
 import { AuthContext } from '../context/AuthContext'
 import { useProject } from '../context/ProjectContext'
+import { useTask } from '../context/TaskContext'
 
 const Dashboard = () => {
   const { userData } = useContext(AuthContext)
   const navigate = useNavigate()
+
   const { projects } = useProject()
+  const { tasks } = useTask()
+
   // =========================
   // INITIAL LOADING
   // =========================
@@ -54,9 +58,8 @@ const Dashboard = () => {
   // PROJECT DATA
   // =========================
 
-  // const projects = Array.isArray(userData.projects)
-  //   ? userData.projects
-  //   : []
+  const projectList = Array.isArray(projects) ? projects : []
+  const taskList = Array.isArray(tasks) ? tasks : []
 
   // =========================
   // PROJECT ANALYTICS
@@ -65,53 +68,45 @@ const Dashboard = () => {
   const projectAnalytics = [
     {
       status: 'Pending',
-      projects: projects.filter((project) => project.status === 'Pending')
+      projects: projectList.filter((project) => project.status === 'Pending')
         .length,
     },
     {
       status: 'In Progress',
-      projects: projects.filter((project) => project.status === 'In Progress')
-        .length,
+      projects: projectList.filter(
+        (project) => project.status === 'In Progress',
+      ).length,
     },
     {
       status: 'Completed',
-      projects: projects.filter((project) => project.status === 'Completed')
+      projects: projectList.filter((project) => project.status === 'Completed')
         .length,
     },
   ]
 
   // =========================
-  // TEMPORARY TASK DATA
-  // Sprint 15 Task API ke baad
-  // isse backend data se replace karna hai
+  // TASK ANALYTICS
   // =========================
 
-  // const recentTasks = [
-  //   {
-  //     id: 1,
-  //     title: 'Build authentication system',
-  //     project: 'TaskMatrix',
-  //     status: 'In Progress',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Create project management API',
-  //     project: 'TaskMatrix',
-  //     status: 'Completed',
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Design dashboard interface',
-  //     project: 'TaskMatrix',
-  //     status: 'Pending',
-  //   },
-  //   {
-  //     id: 4,
-  //     title: 'Implement responsive navbar',
-  //     project: 'TaskMatrix',
-  //     status: 'Completed',
-  //   },
-  // ]
+  const totalTasks = taskList.length
+
+  const pendingTasks = taskList.filter(
+    (task) => task.status === 'Pending',
+  ).length
+
+  const inProgressTasks = taskList.filter(
+    (task) => task.status === 'In Progress',
+  ).length
+
+  const completedTasks = taskList.filter(
+    (task) => task.status === 'Completed',
+  ).length
+
+  // =========================
+  // RECENT TASKS
+  // =========================
+
+  const recentTasks = taskList.slice(0, 3)
 
   // =========================
   // STATUS STYLE
@@ -202,30 +197,33 @@ const Dashboard = () => {
               <p className="text-sm text-slate-500 mt-4">Projects</p>
 
               <p className="text-3xl font-bold text-slate-900 mt-1">
-                {projects?.length || 0}
+                {projectList.length}
               </p>
             </div>
 
             {/* Tasks */}
 
-            <div className="border border-slate-200 rounded-xl p-5 hover:border-orange-200 hover:shadow-sm transition">
+            <div
+              onClick={() => navigate('/tasks')}
+              className="border border-slate-200 rounded-xl p-5 hover:border-orange-200 hover:shadow-sm transition cursor-pointer"
+            >
               <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
                 <ListTodo className="w-5 h-5 text-orange-600" />
               </div>
 
-              <p className="text-sm text-slate-500 mt-4">Pending</p>
+              <p className="text-sm text-slate-500 mt-4">Tasks</p>
 
               <p className="text-3xl font-bold text-slate-900 mt-1">
-                {
-                  projects.filter((project) => project.status === 'Pending')
-                    .length
-                }
+                {totalTasks}
               </p>
             </div>
 
-            {/* Completed */}
+            {/* Completed Tasks */}
 
-            <div className="border border-slate-200 rounded-xl p-5 hover:border-green-200 hover:shadow-sm transition">
+            <div
+              onClick={() => navigate('/tasks')}
+              className="border border-slate-200 rounded-xl p-5 hover:border-green-200 hover:shadow-sm transition cursor-pointer"
+            >
               <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
                 <CheckCircle2 className="w-5 h-5 text-green-600" />
               </div>
@@ -233,16 +231,16 @@ const Dashboard = () => {
               <p className="text-sm text-slate-500 mt-4">Completed</p>
 
               <p className="text-3xl font-bold text-slate-900 mt-1">
-                {
-                  projects.filter((project) => project.status === 'Completed')
-                    .length
-                }
+                {completedTasks}
               </p>
             </div>
 
-            {/* In Progress */}
+            {/* In Progress Tasks */}
 
-            <div className="border border-slate-200 rounded-xl p-5 hover:border-purple-200 hover:shadow-sm transition">
+            <div
+              onClick={() => navigate('/tasks')}
+              className="border border-slate-200 rounded-xl p-5 hover:border-purple-200 hover:shadow-sm transition cursor-pointer"
+            >
               <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
                 <Clock3 className="w-5 h-5 text-purple-600" />
               </div>
@@ -250,10 +248,7 @@ const Dashboard = () => {
               <p className="text-sm text-slate-500 mt-4">In Progress</p>
 
               <p className="text-3xl font-bold text-slate-900 mt-1">
-                {
-                  projects.filter((project) => project.status === 'In Progress')
-                    .length
-                }
+                {inProgressTasks}
               </p>
             </div>
           </div>
@@ -354,9 +349,9 @@ const Dashboard = () => {
             </div>
 
             <div className="p-6">
-              {projects.length > 0 ? (
+              {projectList.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {projects.slice(2, 4).map((project) => (
+                  {projectList.slice(0, 2).map((project) => (
                     <div
                       key={project._id || project.id}
                       className="border border-slate-200 rounded-xl p-5 hover:border-blue-200 hover:shadow-sm transition"
@@ -384,7 +379,7 @@ const Dashboard = () => {
                         </span>
 
                         <button
-                          onClick={() => navigate('/projects')}
+                          onClick={() => navigate(`/projects/${project._id}`)}
                           className="text-xs font-medium text-slate-500 hover:text-blue-600 cursor-pointer"
                         >
                           View Project
@@ -425,6 +420,8 @@ const Dashboard = () => {
         {/* ================================================= */}
 
         <section className="bg-white border border-slate-200 rounded-2xl shadow-sm">
+          {/* Header */}
+
           <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-semibold">Recent Tasks</h2>
@@ -435,7 +432,7 @@ const Dashboard = () => {
             </div>
 
             <button
-              onClick={() => navigate('/projects')}
+              onClick={() => navigate('/tasks')}
               className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition cursor-pointer"
             >
               View All
@@ -446,34 +443,79 @@ const Dashboard = () => {
           {/* Task List */}
 
           <div className="divide-y divide-slate-100">
-            {projects.slice(1, 3).map((task) => (
-              <div
-                key={task.id}
-                className="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition"
-              >
-                <div className="shrink-0 text-slate-400">
-                  <Circle size={17} />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-slate-800 truncate">
-                    {task.projectName || 'Untitled Task'}
-                  </h3>
-
-                  <p className="text-xs text-slate-400 mt-1">
-                    {task.description}
-                  </p>
-                </div>
-
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium shrink-0 ${getStatusStyle(
-                    task.status,
-                  )}`}
+            {recentTasks.length > 0 ? (
+              recentTasks.map((task) => (
+                <div
+                  key={task._id}
+                  className="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition"
                 >
-                  {task.status}
-                </span>
+                  {/* Task Icon */}
+
+                  <div className="shrink-0 text-slate-400">
+                    <Circle size={17} />
+                  </div>
+
+                  {/* Task Information */}
+
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-medium text-slate-800 truncate">
+                      {task.title || 'Untitled Task'}
+                    </h3>
+
+                    <p className="text-xs text-slate-400 mt-1 truncate">
+                      {task.description || 'No description available'}
+                    </p>
+
+                    {/* Project Name */}
+
+                    <p className="text-xs text-slate-400 mt-1">
+                      Project: {task.project?.projectName || 'No project'}
+                    </p>
+                  </div>
+
+                  {/* Status */}
+
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium shrink-0 ${getStatusStyle(
+                      task.status,
+                    )}`}
+                  >
+                    {task.status}
+                  </span>
+
+                  {/* View */}
+
+                  <button
+                    onClick={() => navigate(`/tasks/${task._id}`)}
+                    className="text-xs font-medium text-blue-600 hover:text-blue-700 shrink-0"
+                  >
+                    View
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-10">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center">
+                  <ListTodo size={26} />
+                </div>
+
+                <h3 className="font-semibold text-slate-900 mt-4">
+                  No tasks yet
+                </h3>
+
+                <p className="text-sm text-slate-500 mt-1">
+                  Create a task inside a project to get started.
+                </p>
+
+                <button
+                  onClick={() => navigate('/tasks')}
+                  className="inline-flex items-center gap-2 mt-5 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition cursor-pointer"
+                >
+                  <ListTodo size={17} />
+                  View Tasks
+                </button>
               </div>
-            ))}
+            )}
           </div>
         </section>
 

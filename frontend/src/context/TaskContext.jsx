@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+import toast from 'react-hot-toast'
 import api from '../api/axios'
 
 const TaskContext = createContext()
@@ -9,7 +10,6 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // ================= CREATE TASK =================
   const createTask = async (taskData) => {
     try {
       setLoading(true)
@@ -19,22 +19,23 @@ export const TaskProvider = ({ children }) => {
         withCredentials: true,
       })
 
-      console.log('Create Task Response:', response.data)
-
       if (response.data.success) {
         const newTask = response.data.task
 
         setTasks((prevTasks) => [newTask, ...prevTasks])
         setTask(newTask)
+
+        toast.success('Task created successfully!')
       }
 
       return response.data
     } catch (error) {
       console.error('Create Task Error:', error)
 
-      setError(
-        error.response?.data?.message || 'Failed to create task',
-      )
+      const message = error.response?.data?.message || 'Failed to create task'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -42,7 +43,6 @@ export const TaskProvider = ({ children }) => {
     }
   }
 
-  // ================= GET ALL TASKS =================
   const getTasks = async () => {
     try {
       setLoading(true)
@@ -52,8 +52,6 @@ export const TaskProvider = ({ children }) => {
         withCredentials: true,
       })
 
-      console.log('Get Tasks Response:', response.data)
-
       if (response.data.success) {
         setTasks(response.data.tasks || [])
       }
@@ -62,9 +60,10 @@ export const TaskProvider = ({ children }) => {
     } catch (error) {
       console.error('Get Tasks Error:', error)
 
-      setError(
-        error.response?.data?.message || 'Failed to fetch tasks',
-      )
+      const message = error.response?.data?.message || 'Failed to fetch tasks'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -72,7 +71,6 @@ export const TaskProvider = ({ children }) => {
     }
   }
 
-  // ================= GET SINGLE TASK =================
   const getTask = async (id) => {
     try {
       setLoading(true)
@@ -82,8 +80,6 @@ export const TaskProvider = ({ children }) => {
         withCredentials: true,
       })
 
-      console.log('Get Task Response:', response.data)
-
       if (response.data.success) {
         setTask(response.data.task)
       }
@@ -92,9 +88,10 @@ export const TaskProvider = ({ children }) => {
     } catch (error) {
       console.error('Get Task Error:', error)
 
-      setError(
-        error.response?.data?.message || 'Failed to fetch task',
-      )
+      const message = error.response?.data?.message || 'Failed to fetch task'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -102,20 +99,14 @@ export const TaskProvider = ({ children }) => {
     }
   }
 
-  // ================= GET PROJECT TASKS =================
   const getProjectTasks = async (projectId) => {
     try {
       setLoading(true)
       setError(null)
 
-      const response = await api.get(
-        `/tasks/project/${projectId}`,
-        {
-          withCredentials: true,
-        },
-      )
-
-      console.log('Get Project Tasks Response:', response.data)
+      const response = await api.get(`/tasks/project/${projectId}`, {
+        withCredentials: true,
+      })
 
       if (response.data.success) {
         setTasks(response.data.tasks || [])
@@ -125,10 +116,11 @@ export const TaskProvider = ({ children }) => {
     } catch (error) {
       console.error('Get Project Tasks Error:', error)
 
-      setError(
-        error.response?.data?.message ||
-          'Failed to fetch project tasks',
-      )
+      const message =
+        error.response?.data?.message || 'Failed to fetch project tasks'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -136,41 +128,35 @@ export const TaskProvider = ({ children }) => {
     }
   }
 
-  // ================= UPDATE TASK =================
   const updateTask = async (id, taskData) => {
     try {
       setLoading(true)
       setError(null)
 
-      const response = await api.put(
-        `/tasks/${id}`,
-        taskData,
-        {
-          withCredentials: true,
-        },
-      )
-
-      console.log('Update Task Response:', response.data)
+      const response = await api.put(`/tasks/${id}`, taskData, {
+        withCredentials: true,
+      })
 
       if (response.data.success) {
         const updatedTask = response.data.task
 
         setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task._id === id ? updatedTask : task,
-          ),
+          prevTasks.map((task) => (task._id === id ? updatedTask : task)),
         )
 
         setTask(updatedTask)
+
+        toast.success('Task updated successfully!')
       }
 
       return response.data
     } catch (error) {
       console.error('Update Task Error:', error)
 
-      setError(
-        error.response?.data?.message || 'Failed to update task',
-      )
+      const message = error.response?.data?.message || 'Failed to update task'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -178,35 +164,33 @@ export const TaskProvider = ({ children }) => {
     }
   }
 
-  // ================= DELETE TASK =================
   const deleteTask = async (id) => {
     try {
       setLoading(true)
       setError(null)
 
-      const response = await api.delete(`/api/tasks/${id}`, {
+      const response = await api.delete(`/tasks/${id}`, {
         withCredentials: true,
       })
 
-      console.log('Delete Task Response:', response.data)
-
       if (response.data.success) {
-        setTasks((prevTasks) =>
-          prevTasks.filter((task) => task._id !== id),
-        )
+        setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id))
 
         if (task?._id === id) {
           setTask(null)
         }
+
+        toast.success('Task deleted successfully!')
       }
 
       return response.data
     } catch (error) {
       console.error('Delete Task Error:', error)
 
-      setError(
-        error.response?.data?.message || 'Failed to delete task',
-      )
+      const message = error.response?.data?.message || 'Failed to delete task'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -214,12 +198,10 @@ export const TaskProvider = ({ children }) => {
     }
   }
 
-  // ================= CLEAR TASK =================
   const clearTask = () => {
     setTask(null)
   }
 
-  // ================= CLEAR ERROR =================
   const clearError = () => {
     setError(null)
   }
@@ -231,14 +213,12 @@ export const TaskProvider = ({ children }) => {
         task,
         loading,
         error,
-
         createTask,
         getTasks,
         getTask,
         getProjectTasks,
         updateTask,
         deleteTask,
-
         clearTask,
         clearError,
       }}
@@ -248,14 +228,11 @@ export const TaskProvider = ({ children }) => {
   )
 }
 
-// ================= CUSTOM HOOK =================
 export const useTask = () => {
   const context = useContext(TaskContext)
 
   if (!context) {
-    throw new Error(
-      'useTask must be used inside TaskProvider',
-    )
+    throw new Error('useTask must be used inside TaskProvider')
   }
 
   return context

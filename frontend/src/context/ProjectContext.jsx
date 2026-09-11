@@ -1,14 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import api from '../api/axios'
-import { useNavigate } from 'react-router-dom'
+
 const ProjectContext = createContext()
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-const Navigate = useNavigate()
-  // ================= GET ALL PROJECTS =================
+
   const getProjects = async () => {
     try {
       setLoading(true)
@@ -21,17 +21,19 @@ const Navigate = useNavigate()
       if (response.data.success) {
         setProjects(response.data.projects)
       }
-      console.log('Get Projects Response:', response.data)
     } catch (error) {
       console.error('Get Projects Error:', error)
 
-      setError(error.response?.data?.message || 'Failed to fetch projects')
+      const message =
+        error.response?.data?.message || 'Failed to fetch projects'
+
+      setError(message)
+      toast.error(message)
     } finally {
       setLoading(false)
     }
   }
 
-  // ================= CREATE PROJECT =================
   const createProject = async (projectData) => {
     try {
       setLoading(true)
@@ -40,16 +42,22 @@ const Navigate = useNavigate()
       const response = await api.post('/projects/create', projectData, {
         withCredentials: true,
       })
-      console.log('Create Project Response:', response.data)
+
       if (response.data.success) {
         setProjects((prevProjects) => [response.data.project, ...prevProjects])
+
+        toast.success('Project created successfully!')
       }
-      // Navigate('/projects')
+
       return response.data
     } catch (error) {
       console.error('Create Project Error:', error)
 
-      setError(error.response?.data?.message || 'Failed to create project')
+      const message =
+        error.response?.data?.message || 'Failed to create project'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -57,7 +65,6 @@ const Navigate = useNavigate()
     }
   }
 
-  // ================= GET SINGLE PROJECT =================
   const getProject = async (id) => {
     try {
       setLoading(true)
@@ -71,7 +78,10 @@ const Navigate = useNavigate()
     } catch (error) {
       console.error('Get Project Error:', error)
 
-      setError(error.response?.data?.message || 'Failed to fetch project')
+      const message = error.response?.data?.message || 'Failed to fetch project'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -79,7 +89,6 @@ const Navigate = useNavigate()
     }
   }
 
-  // ================= UPDATE PROJECT =================
   const updateProject = async (id, projectData) => {
     try {
       setLoading(true)
@@ -95,13 +104,19 @@ const Navigate = useNavigate()
             project._id === id ? response.data.project : project,
           ),
         )
+
+        toast.success('Project updated successfully!')
       }
 
       return response.data
     } catch (error) {
       console.error('Update Project Error:', error)
 
-      setError(error.response?.data?.message || 'Failed to update project')
+      const message =
+        error.response?.data?.message || 'Failed to update project'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
@@ -109,7 +124,6 @@ const Navigate = useNavigate()
     }
   }
 
-  // ================= DELETE PROJECT =================
   const deleteProject = async (id) => {
     try {
       setLoading(true)
@@ -123,19 +137,26 @@ const Navigate = useNavigate()
         setProjects((prevProjects) =>
           prevProjects.filter((project) => project._id !== id),
         )
+
+        toast.success('Project deleted successfully!')
       }
 
       return response.data
     } catch (error) {
       console.error('Delete Project Error:', error)
 
-      setError(error.response?.data?.message || 'Failed to delete project')
+      const message =
+        error.response?.data?.message || 'Failed to delete project'
+
+      setError(message)
+      toast.error(message)
 
       throw error
     } finally {
       setLoading(false)
     }
   }
+
   useEffect(() => {
     getProjects()
   }, [])
@@ -158,13 +179,12 @@ const Navigate = useNavigate()
   )
 }
 
-// ================= CUSTOM HOOK =================
 export const useProject = () => {
   const context = useContext(ProjectContext)
 
-  // if (!context) {
-  //   throw new Error('useProject must be used inside ProjectProvider')
-  // }
+  if (!context) {
+    throw new Error('useProject must be used inside ProjectProvider')
+  }
 
   return context
 }
