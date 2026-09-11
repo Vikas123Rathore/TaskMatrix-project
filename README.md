@@ -1,4 +1,3 @@
-
 # 🚀 TaskMatrix
 
 TaskMatrix is a full-stack Agile Project Management Platform designed to help software teams manage projects, tasks, workflows, and team collaboration from a centralized workspace.
@@ -11,9 +10,23 @@ This project is being developed as part of my **Software Engineering Internship 
 
 Sprint 14 focused on building the initial working foundation of TaskMatrix.
 
-The primary objective of this sprint was to establish a functional full-stack application with a secure authentication system, protected routes, frontend-backend integration, and production deployment.
+The primary objective was to establish a functional full-stack application with secure authentication, protected routes, frontend-backend integration, and production deployment.
 
-The authentication flow was implemented and tested from registration through login, protected dashboard access, session persistence, and logout.
+### Sprint 14 Highlights
+
+- User registration and login
+- JWT-based authentication
+- HttpOnly cookie-based token storage
+- Password hashing using bcrypt
+- Authentication middleware
+- Protected API routes
+- Current authenticated user API
+- Persistent authentication after page refresh
+- React Context API for authentication state
+- Protected frontend routes
+- Vercel frontend deployment
+- Render backend deployment
+- MongoDB Atlas database
 
 ---
 
@@ -35,6 +48,50 @@ The authentication flow was implemented and tested from registration through log
 - Protected Dashboard
 - Authentication-based route protection
 
+### 📁 Project Management
+
+- Create Project
+- View all Projects
+- View Project Details
+- Update Project
+- Delete Project
+- Project status management
+- Project ownership using authenticated user
+- Project-specific task management
+
+### ✅ Task Management
+
+- Create Task
+- View all Tasks
+- View Project Tasks
+- View Task Details
+- Update Task
+- Delete Task
+- Task priority management
+- Task status management
+- Due date support
+- Tasks linked to Projects
+- User-specific task access
+
+### 🔔 Notifications
+
+- Success toast notifications
+- Error toast notifications
+- Authentication action notifications
+- Project operation notifications
+- Task operation notifications
+
+### 📊 Dashboard
+
+- Project count
+- Task count
+- Completed task count
+- In Progress task count
+- Recent Tasks
+- My Projects
+- Project progress display
+- Quick Overview cards
+
 ### 🎨 Frontend
 
 - React.js with Vite
@@ -44,9 +101,12 @@ The authentication flow was implemented and tested from registration through log
 - Login page
 - Registration page
 - Protected Dashboard
-- Authentication state management
+- Project pages
+- Task pages
 - Axios API integration
+- Context API state management
 - Client-side route protection
+- Toast notifications using react-hot-toast
 - Vercel SPA routing configuration
 
 ### ⚙️ Backend
@@ -62,6 +122,7 @@ The authentication flow was implemented and tested from registration through log
 - dotenv
 - REST API architecture
 - Protected middleware
+- User-specific Project and Task authorization
 
 ---
 
@@ -76,6 +137,7 @@ The authentication flow was implemented and tested from registration through log
 - Axios
 - Lucide React
 - Context API
+- React Hot Toast
 
 ### Backend
 
@@ -103,33 +165,33 @@ The authentication flow was implemented and tested from registration through log
 
 ```text
                          ┌──────────────────────┐
-                         │       User           │
+                         │        User          │
                          └──────────┬───────────┘
                                     │
                                     ▼
                          ┌──────────────────────┐
-                         │ React + Vite         │
-                         │ Frontend             │
-                         │ Vercel               │
+                         │   React + Vite       │
+                         │      Frontend        │
+                         │       Vercel         │
                          └──────────┬───────────┘
                                     │
-                              Axios API
+                               Axios API
                                     │
                                     ▼
                          ┌──────────────────────┐
-                         │ Node.js + Express    │
-                         │ Backend              │
-                         │ Render               │
+                         │ Node.js + Express     │
+                         │      Backend          │
+                         │       Render          │
                          └──────────┬───────────┘
                                     │
-                       ┌────────────┴────────────┐
-                       │                         │
-                       ▼                         ▼
-                ┌──────────────┐        ┌────────────────┐
-                │ JWT + Cookie │        │ MongoDB Atlas  │
-                │ Authentication│        │ Database       │
-                └──────────────┘        └────────────────┘
-````
+                    ┌───────────────┴───────────────┐
+                    │                               │
+                    ▼                               ▼
+             ┌──────────────┐              ┌────────────────┐
+             │ JWT + Cookie │              │ MongoDB Atlas  │
+             │ Authentication│              │    Database    │
+             └──────────────┘              └────────────────┘
+```
 
 ---
 
@@ -143,17 +205,22 @@ TaskMatrix-project/
 │   │   └── db.js
 │   │
 │   ├── controllers/
-│   │   └── userController.js
+│   │   ├── userController.js
+│   │   ├── projectController.js
+│   │   └── taskController.js
 │   │
 │   ├── middleware/
 │   │   └── authMiddleware.js
 │   │
 │   ├── models/
-│   │   └── userModel.js
+│   │   ├── userModel.js
+│   │   ├── projectModel.js
+│   │   └── taskModel.js
 │   │
 │   ├── routes/
 │   │   ├── userRoute.js
-│   │   └── taskRoute.js
+│   │   ├── projectRouter.js
+│   │   └── taskRouter.js
 │   │
 │   ├── utils/
 │   │   └── token.js
@@ -167,13 +234,29 @@ TaskMatrix-project/
 │   │   ├── api/
 │   │   │   └── axios.js
 │   │   │
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── ProjectCard.jsx
+│   │   │   └── TaskCard.jsx
+│   │   │
 │   │   ├── context/
-│   │   │   └── AuthContext.jsx
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── ProjectContext.jsx
+│   │   │   └── TaskContext.jsx
 │   │   │
 │   │   ├── pages/
 │   │   │   ├── Login.jsx
 │   │   │   ├── Register.jsx
-│   │   │   └── Daskboard.jsx
+│   │   │   ├── Daskboard.jsx
+│   │   │   ├── Projects.jsx
+│   │   │   ├── CreateProject.jsx
+│   │   │   ├── ProjectDetails.jsx
+│   │   │   ├── EditProject.jsx
+│   │   │   ├── Tasks.jsx
+│   │   │   ├── CreateTask.jsx
+│   │   │   ├── TaskDetails.jsx
+│   │   │   └── EditTask.jsx
 │   │   │
 │   │   ├── App.jsx
 │   │   ├── main.jsx
@@ -197,43 +280,80 @@ TaskMatrix uses JWT-based authentication with HttpOnly cookies.
 
 ```text
 User
-  │
-  ▼
+ │
+ ▼
 Register
-  │
-  ▼
+ │
+ ▼
 Account Created
-  │
-  ▼
+ │
+ ▼
 Login
-  │
-  ▼
+ │
+ ▼
 Backend validates credentials
-  │
-  ▼
+ │
+ ▼
 Password verified using bcrypt
-  │
-  ▼
+ │
+ ▼
 JWT generated
-  │
-  ▼
+ │
+ ▼
 JWT stored in HttpOnly Cookie
-  │
-  ▼
+ │
+ ▼
 Protected Dashboard
-  │
-  ▼
+ │
+ ▼
 Current User verification
-  │
-  ▼
+ │
+ ▼
 Logout
-  │
-  ▼
+ │
+ ▼
 Cookie cleared
-  │
-  ▼
+ │
+ ▼
 Login Page
 ```
+
+---
+
+# 📁 Project & Task Relationship
+
+A **Project** represents a larger piece of work, while a **Task** represents an actionable item inside that project.
+
+```text
+Project
+   │
+   ├── Task 1
+   ├── Task 2
+   └── Task 3
+```
+
+Each Task is linked to its Project using the Project MongoDB ObjectId.
+
+### Project Fields
+
+- `projectName`
+- `description`
+- `status`
+- `authorId`
+- `createdAt`
+- `updatedAt`
+
+### Task Fields
+
+- `title`
+- `description`
+- `project`
+- `priority`
+- `status`
+- `dueDate`
+- `authorId`
+- `createdAt`
+- `updatedAt`
 
 ---
 
@@ -241,22 +361,25 @@ Login Page
 
 The application implements the following security practices:
 
-* Passwords are hashed using bcrypt before storing them in MongoDB.
-* JWT is stored using an HttpOnly cookie.
-* Authentication middleware verifies JWT tokens.
-* Protected routes require valid authentication.
-* Passwords are never returned from the current-user API.
-* CORS is configured with credentials support.
-* Environment variables are used for sensitive configuration.
-* `.env` files are excluded from Git.
-* `.env.example` files are provided as configuration references.
-* Production cookies use secure HTTPS configuration.
+- Passwords are hashed using bcrypt before storing them in MongoDB.
+- JWT is stored using an HttpOnly cookie.
+- Authentication middleware verifies JWT tokens.
+- Protected routes require valid authentication.
+- Project and Task operations are restricted to the authenticated user.
+- Passwords are never returned from the current-user API.
+- CORS is configured with credentials support.
+- Environment variables are used for sensitive configuration.
+- `.env` files are excluded from Git.
+- `.env.example` files are provided as configuration references.
+- Production cookies use secure HTTPS configuration.
 
 ---
 
 # 🔗 API Endpoints
 
-## Register
+## Authentication
+
+### Register
 
 ```http
 POST /api/auth/register
@@ -264,19 +387,7 @@ POST /api/auth/register
 
 Creates a new user account.
 
-### Request
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
----
-
-## Login
+### Login
 
 ```http
 POST /api/auth/login
@@ -284,18 +395,7 @@ POST /api/auth/login
 
 Authenticates the user and creates the JWT authentication cookie.
 
-### Request
-
-```json
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
----
-
-## Logout
+### Logout
 
 ```http
 POST /api/auth/logout
@@ -303,38 +403,109 @@ POST /api/auth/logout
 
 Clears the authentication cookie and logs the user out.
 
----
-
-## Current User
+### Current User
 
 ```http
 GET /api/auth/current-user
 ```
 
-Protected endpoint that returns the currently authenticated user.
-
-### Response
-
-```json
-{
-  "success": true,
-  "user": {
-    "id": "user_id",
-    "name": "John Doe",
-    "email": "john@example.com"
-  }
-}
-```
+Returns the currently authenticated user.
 
 ---
 
-## Protected Tasks Route
+## Projects
+
+### Create Project
+
+```http
+POST /api/projects/create
+```
+
+Creates a new project for the authenticated user.
+
+### Get Projects
+
+```http
+GET /api/projects
+```
+
+Returns projects belonging to the authenticated user.
+
+### Get Project
+
+```http
+GET /api/projects/:id
+```
+
+Returns a single project owned by the authenticated user.
+
+### Update Project
+
+```http
+PUT /api/projects/:id
+```
+
+Updates an existing project.
+
+### Delete Project
+
+```http
+DELETE /api/projects/:id
+```
+
+Deletes an existing project.
+
+---
+
+## Tasks
+
+### Create Task
+
+```http
+POST /api/tasks
+```
+
+Creates a task and links it to a project.
+
+### Get Tasks
 
 ```http
 GET /api/tasks
 ```
 
-Protected route used to verify authentication middleware.
+Returns tasks belonging to the authenticated user.
+
+### Get Project Tasks
+
+```http
+GET /api/tasks/project/:projectId
+```
+
+Returns all tasks belonging to a specific project.
+
+### Get Task
+
+```http
+GET /api/tasks/:id
+```
+
+Returns a single task.
+
+### Update Task
+
+```http
+PUT /api/tasks/:id
+```
+
+Updates an existing task.
+
+### Delete Task
+
+```http
+DELETE /api/tasks/:id
+```
+
+Deletes an existing task.
 
 ---
 
@@ -358,7 +529,7 @@ CLIENT_URL=http://localhost:5173
 NODE_ENV=development
 ```
 
-For production, configure the environment variables through the hosting platform.
+For production, configure environment variables through the hosting platform.
 
 ---
 
@@ -381,7 +552,6 @@ For production:
 ```env
 VITE_API_URL=https://taskmatrix-project.onrender.com/api
 ```
-
 
 ---
 
@@ -408,15 +578,7 @@ cd backend
 npm install
 ```
 
-Create the `.env` file:
-
-```env
-PORT=8080
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-CLIENT_URL=http://localhost:5173
-NODE_ENV=development
-```
+Create the `.env` file and add the required environment variables.
 
 Start the backend:
 
@@ -424,7 +586,7 @@ Start the backend:
 npm run dev
 ```
 
-Backend will run on:
+Backend:
 
 ```text
 http://localhost:8080
@@ -441,13 +603,7 @@ cd frontend
 npm install
 ```
 
-Create:
-
-```text
-.env
-```
-
-Add:
+Create the `.env` file:
 
 ```env
 VITE_API_URL=http://localhost:8080/api
@@ -459,7 +615,7 @@ Start the frontend:
 npm run dev
 ```
 
-Frontend will run on:
+Frontend:
 
 ```text
 http://localhost:5173
@@ -467,25 +623,168 @@ http://localhost:5173
 
 ---
 
+# 🧪 Sprint 15 – Feature Complete
+
+Sprint 15 focused on implementing the core project and task management functionality of TaskMatrix.
+
+### Sprint 15 Deliverables
+
+- Project CRUD
+- Task CRUD
+- Project Details page
+- Project-specific task listing
+- Task Details page
+- Task editing
+- Task deletion
+- Project editing
+- Project deletion
+- Task priority
+- Task status
+- Task due dates
+- Project status
+- Dashboard project statistics
+- Dashboard task statistics
+- Recent Tasks section
+- My Projects section
+- Toast notifications
+- Protected Project APIs
+- Protected Task APIs
+- User-specific data access
+- Project → Task relationship
+
+### Sprint 15 Demo Flow
+
+```text
+Login
+  ↓
+Dashboard
+  ↓
+Create Project
+  ↓
+View Project
+  ↓
+Create Task
+  ↓
+View Task
+  ↓
+Edit Task
+  ↓
+Update Status / Priority
+  ↓
+Dashboard Statistics
+  ↓
+Delete Task
+  ↓
+Edit / Delete Project
+  ↓
+Logout
+```
+
+---
+
+# 🧪 Testing Checklist
+
+| Test Case | Status |
+|---|---|
+| User Registration | ✅ |
+| User Login | ✅ |
+| Invalid Login | ✅ |
+| JWT Authentication | ✅ |
+| Protected Dashboard | ✅ |
+| Current User | ✅ |
+| Page Refresh Authentication | ✅ |
+| User Logout | ✅ |
+| Project Create | ✅ |
+| Project Read | ✅ |
+| Project Update | ✅ |
+| Project Delete | ✅ |
+| Task Create | ✅ |
+| Task Read | ✅ |
+| Task Update | ✅ |
+| Task Delete | ✅ |
+| Project-specific Tasks | ✅ |
+| Dashboard Statistics | ✅ |
+| Toast Notifications | ✅ |
+| Protected API Routes | ✅ |
+| Production Deployment | ✅ |
+
+---
+
+# 📈 Sprint 15 Outcome
+
+By completing Sprint 15, TaskMatrix progressed from an authentication foundation into a functional project management application.
+
+The sprint delivered:
+
+- Complete Project CRUD
+- Complete Task CRUD
+- Project and Task relationship
+- Project-specific task management
+- Task priority and status management
+- Due date support
+- Dashboard statistics
+- Authentication-protected data
+- User-specific authorization
+- Toast notifications
+- Improved application workflow
+
+The core application is now ready for the next phase of development.
+
+---
+
+# 🔮 Future Scope
+
+Future development of TaskMatrix can include:
+
+- Kanban Board
+- Team Management
+- Role-Based Access Control
+- Notifications
+- Dashboard Analytics
+- Real-Time Updates using Socket.io
+- AI-powered Task Assistant
+- AI Task Suggestions
+- Activity Tracking
+- Advanced Search and Filtering
+- Improved UI/UX Polish
+
+---
+
+# 🚀 Upcoming Sprint
+
+## Sprint 16 – The AI Injection & Polish
+
+The next major development phase will focus on:
+
+- AI-powered task assistance
+- AI-generated task suggestions
+- Real-time updates using Socket.io
+- UI/UX improvements
+- Dashboard polish
+- Better user experience
+- Final feature improvements
+
+---
+
 # 🌐 Live Demo
 
 ### Frontend
 
-👉 [https://task-matrix-project.vercel.app](https://task-matrix-project.vercel.app)
+https://task-matrix-project.vercel.app
 
 ### Dashboard
 
-👉 [https://task-matrix-project.vercel.app/dashboard](https://task-matrix-project.vercel.app/dashboard)
+https://task-matrix-project.vercel.app/dashboard
 
 ### Backend API
 
-👉 [https://taskmatrix-project.onrender.com](https://taskmatrix-project.onrender.com)
+https://taskmatrix-project.onrender.com
 
 ---
 
 # 📂 GitHub Repository
 
-👉 [https://github.com/Vikas123Rathore/TaskMatrix-project](https://github.com/Vikas123Rathore/TaskMatrix-project)
+https://github.com/Vikas123Rathore/TaskMatrix-project
 
 ---
 
@@ -527,86 +826,29 @@ MongoDB Atlas is used as the cloud database.
 
 ---
 
-# 🧪 Authentication Testing
-
-The following authentication scenarios were tested:
-
-| Test Case                   | Status |
-| --------------------------- | ------ |
-| User Registration           | ✅      |
-| User Login                  | ✅      |
-| Invalid Login               | ✅      |
-| JWT Authentication          | ✅      |
-| Protected Dashboard         | ✅      |
-| Current User                | ✅      |
-| Page Refresh Authentication | ✅      |
-| User Logout                 | ✅      |
-| Protected API Route         | ✅      |
-| Production Deployment       | ✅      |
-
----
-
-# 📈 Sprint 14 Outcome
-
-By completing Sprint 14, TaskMatrix achieved a functional full-stack foundation.
-
-The sprint successfully delivered:
-
-* Complete user authentication
-* Secure password hashing
-* JWT authentication
-* HttpOnly cookie authentication
-* Authentication middleware
-* Protected API routes
-* Protected frontend routes
-* Global authentication state
-* Frontend-backend integration
-* Environment-based configuration
-* Production deployment
-* Vercel SPA routing
-* Basic dashboard foundation
-
-This authentication foundation will support the development of additional TaskMatrix features in future sprints.
-
----
-
-# 🔮 Future Scope
-
-Future development of TaskMatrix can include:
-
-* Project Management
-* Task Management
-* Kanban Board
-* Team Management
-* Role-Based Access Control
-* Notifications
-* Dashboard Analytics
-* Real-Time Updates using Socket.io
-* AI-powered Task Assistant
-* Activity Tracking
-
----
-
 # 🎓 Internship
 
 This project is being developed as part of my **Software Engineering Internship at Prodesk IT**.
 
-Sprint 14 helped strengthen practical knowledge of:
+Through TaskMatrix, I have strengthened practical knowledge of:
 
-* Full-Stack Development
-* React.js
-* Node.js
-* Express.js
-* MongoDB
-* REST APIs
-* JWT Authentication
-* Secure Cookies
-* React Context API
-* Protected Routing
-* Git & GitHub
-* Deployment
-* Production Environment Configuration
-* Debugging and Testing
+- Full-Stack Development
+- React.js
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- REST APIs
+- JWT Authentication
+- Secure Cookies
+- React Context API
+- Protected Routing
+- CRUD Operations
+- API Integration
+- Git & GitHub
+- Deployment
+- Production Environment Configuration
+- Debugging and Testing
 
 ---
 
@@ -623,25 +865,8 @@ Prodesk IT
 
 ### GitHub
 
-[https://github.com/Vikas123Rathore/TaskMatrix-project](https://github.com/Vikas123Rathore/TaskMatrix-project)
+https://github.com/Vikas123Rathore/TaskMatrix-project
 
 ### Live Demo
 
-[https://task-matrix-project.vercel.app](https://task-matrix-project.vercel.app)
-
-````
-
-### GitHub me add karne ke baad
-
-Root folder me ye structure hona chahiye:
-
-```text
-TaskMatrix-project/
-│
-├── backend/
-├── frontend/
-├── .gitignore
-├── README.md       ✅
-└── Prompts.md      ✅
-````
-
+https://task-matrix-project.vercel.app
