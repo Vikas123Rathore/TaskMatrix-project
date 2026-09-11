@@ -736,9 +736,6 @@ The core application is now ready for the next phase of development.
 
 Future development of TaskMatrix can include:
 
-- Kanban Board
-- Team Management
-- Role-Based Access Control
 - Notifications
 - Dashboard Analytics
 - Real-Time Updates using Socket.io

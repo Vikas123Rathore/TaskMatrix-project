@@ -1,29 +1,25 @@
-## TaskMatrix – Sprint 14: The Walking Skeleton
+# TaskMatrix – Prompts & AI-Assisted Development
 
 This document records the main prompts and AI-assisted development activities used during the development of TaskMatrix.
 
-AI tools were used primarily as a development assistant for debugging, reviewing implementation approaches, improving code quality, understanding errors, validating technical decisions, and documentation support.
-
-The overall project structure, feature decisions, implementation flow, and integration were developed and reviewed by me.
+AI tools were used mainly as a supporting resource for understanding requirements, debugging errors, reviewing specific implementation issues, and improving documentation. The core coding, feature implementation, integration, testing, and project decisions were handled as part of my own development work.
 
 ---
 
 # 1. Development Approach
 
-The development process followed a practical full-stack development workflow:
+The development process followed a practical full-stack workflow:
 
-1. Understand the Sprint 14 requirements.
-2. Define the authentication flow.
-3. Design the frontend and backend structure.
-4. Implement the required functionality.
-5. Integrate frontend with backend APIs.
-6. Test authentication and protected routes.
-7. Debug issues during local development.
-8. Configure production deployment.
-9. Verify the deployed application.
-10. Document the completed work.
+1. Understand the sprint requirements.
+2. Plan the required features.
+3. Implement the backend APIs and database models.
+4. Build and connect the frontend pages and components.
+5. Test the application locally.
+6. Debug issues based on actual errors.
+7. Improve the UI and user experience where required.
+8. Document the completed work.
 
-AI assistance was used when required during these stages, but the generated suggestions were reviewed and adapted before being included in the project.
+AI assistance was used only where it was useful during these stages. Suggestions were reviewed and adapted to the existing codebase instead of directly adding unrelated generated functionality.
 
 ---
 
@@ -34,401 +30,418 @@ AI assistance was used when required during these stages, but the generated sugg
 ```text
 I am building TaskMatrix, a full-stack Agile Project Management Platform.
 
-For Sprint 14, the main objective is to create a Walking Skeleton with a working authentication foundation.
+Help me understand the sprint requirements and break them into practical frontend, backend, database, API, and UI tasks.
 
-Help me break down the Sprint 14 requirements into practical frontend, backend, database, authentication, API, and deployment tasks.
-````
-
-### Purpose
-
-Used to organize the Sprint 14 requirements into an implementation plan before development.
-
----
-
-# 3. Authentication Architecture
-
-### Prompt
-
-```text
-Help me design a secure authentication flow for a MERN application using:
-
-- React
-- Node.js
-- Express.js
-- MongoDB
-- JWT
-- bcrypt
-- HttpOnly cookies
-
-The required flow is:
-
-Register → Login → Protected Dashboard → Logout
-
-Explain how the frontend, backend, database, JWT, cookies, and authentication middleware should interact.
+Keep the implementation suitable for my existing project structure and avoid adding unnecessary features.
 ```
 
 ### Purpose
 
-Used as a reference while designing the authentication architecture and request flow.
+Used to understand the sprint requirements and organize the implementation work.
 
 ---
 
-# 4. Backend Folder Structure
+# 3. Authentication Development
 
 ### Prompt
 
 ```text
-Suggest a clean Express.js backend structure for an authentication-based MERN application using controllers, routes, models, middleware, configuration, and utility functions.
+Review my existing MERN authentication implementation.
 
-Keep the structure simple and suitable for a small production-oriented project.
+Check the registration, login, JWT, HttpOnly cookie, logout, authentication middleware, protected routes, and current-user flow.
+
+If there is an error, explain the actual problem and suggest the smallest practical fix instead of rewriting the whole project.
 ```
 
 ### Purpose
 
-Used to validate the backend organization and separation of responsibilities.
+Used mainly for debugging and reviewing authentication issues during development.
 
 ---
 
-# 5. MongoDB User Model
+# 4. API and Route Debugging
 
 ### Prompt
 
 ```text
-Review the structure of a MongoDB/Mongoose user model for an authentication system.
+I am getting an API error in my TaskMatrix project.
 
-The model should contain the basic user information required for registration and login, while ensuring passwords are handled securely.
+Review the frontend API call, Express route, controller, and backend response.
+
+Identify why the request is failing and tell me exactly which file and line of logic should be corrected.
+
+Do not redesign the existing implementation.
 ```
 
 ### Purpose
 
-Used to review the user schema and authentication-related data requirements.
+Used when frontend and backend routes were not matching or an API request returned an unexpected error.
 
 ---
 
-# 6. Registration API
+# 5. Project Management CRUD
 
 ### Prompt
 
 ```text
-Review the logic for a user registration API in Express.js.
+I want to add Project CRUD functionality to my existing TaskMatrix MERN application.
 
-Requirements:
+The project should support:
 
-- Validate required fields
-- Check whether the email already exists
-- Hash the password using bcrypt
-- Create the user in MongoDB
-- Do not return the password
-- Return an appropriate success/error response
+- Create project
+- Get projects
+- Get a single project
+- Update project
+- Delete project
 
-Keep the implementation simple and secure.
+Use the existing authentication system so each user can access only their own projects.
+
+Keep the implementation simple and consistent with my current folder structure.
 ```
 
 ### Purpose
 
-Used to review validation, password hashing, duplicate-user handling, and API responses.
+Used as a reference while planning the Project CRUD feature. The implementation was integrated into the existing application structure and tested locally.
 
 ---
 
-# 7. Login and JWT Authentication
+# 6. Project Model and Controller Review
 
 ### Prompt
 
 ```text
-Review a login implementation using JWT authentication.
+Review my Project Mongoose model and controller.
 
-Requirements:
+The project needs:
 
-- Find the user using email
-- Compare the password using bcrypt
-- Generate a JWT containing the user identifier
-- Store the JWT in an HttpOnly cookie
-- Configure the cookie correctly for development and production
-- Return basic user information without the password
+- projectName
+- description
+- status
+- authorId
+- timestamps
+
+Check the validation, user ownership, CRUD operations, and MongoDB queries.
+
+Point out only the issues that need to be fixed.
 ```
 
 ### Purpose
 
-Used to validate the login and JWT implementation.
+Used for reviewing the Project model and CRUD controller logic.
 
 ---
 
-# 8. Authentication Middleware
+# 7. Task Management Design
 
 ### Prompt
 
 ```text
-Review an Express authentication middleware that reads a JWT from an HttpOnly cookie.
+I have Projects in TaskMatrix and now I need Tasks inside each project.
 
-The middleware should:
+Explain the correct relationship between Project and Task in MongoDB/Mongoose.
 
-1. Check whether the token exists.
-2. Verify the token using JWT_SECRET.
-3. Extract the user ID.
-4. Attach the user ID to req.user.
-5. Reject missing, invalid, or expired tokens.
-6. Continue to the next middleware when authentication succeeds.
+A task should belong to one project and one user.
+
+Suggest a simple Task model and API structure that fits my existing Project CRUD implementation.
 ```
 
 ### Purpose
 
-Used for reviewing protected-route authentication and error handling.
+Used to understand the Project → Task relationship before implementing Task Management.
 
 ---
 
-# 9. Axios API Configuration
+# 8. Task CRUD Implementation
 
 ### Prompt
 
 ```text
-Review an Axios configuration for a React frontend communicating with an Express backend.
+Help me implement Task CRUD in my existing TaskMatrix backend.
 
-Requirements:
+Task fields:
 
-- Use VITE_API_URL as the API base URL.
-- Send HttpOnly authentication cookies with requests.
-- Keep the configuration reusable across API calls.
+- title
+- description
+- project
+- priority
+- status
+- dueDate
+- authorId
+
+Required operations:
+
+- Create task
+- Get all tasks
+- Get tasks for a project
+- Get single task
+- Update task
+- Delete task
+
+A task should only be created for a project owned by the logged-in user.
+
+Keep the implementation consistent with my existing controllers, routes, authentication middleware, and Mongoose models.
 ```
 
 ### Purpose
 
-Used to review frontend-backend API communication and credential configuration.
+Used as a reference while implementing Task Management. The task APIs were then tested with actual project and task data.
 
 ---
 
-# 10. React Authentication State
+# 9. Task API Debugging
 
 ### Prompt
 
 ```text
-Review a React Context API based authentication state.
+Review this Task API error from my TaskMatrix project.
 
-The application needs to maintain:
+Check whether the issue is related to the route, controller, project ID, authentication middleware, or request body.
 
-- Current user
-- Initial authentication loading state
+Explain the cause and give the smallest correction required.
+```
+
+### Purpose
+
+Used for debugging Task API issues during local development.
+
+---
+
+# 10. Project and Task Frontend Integration
+
+### Prompt
+
+```text
+I already have Project CRUD working in my React application.
+
+Now connect Tasks with Projects without changing the existing UI unnecessarily.
+
+The flow should be:
+
+Projects → View Project → Project Details → Create Task → Task appears inside that project.
+
+Use the existing Context API and Axios setup.
+```
+
+### Purpose
+
+Used to plan the frontend flow between Projects and Tasks.
+
+---
+
+# 11. React Context Review
+
+### Prompt
+
+```text
+Review my existing ProjectContext and TaskContext.
+
+Check:
+
+- API endpoints
+- loading state
+- error handling
+- state updates after create/update/delete
+- correct use of MongoDB _id
+- consistency with the backend routes
+
+Do not add unnecessary abstractions.
+```
+
+### Purpose
+
+Used to review Context API state management and fix small frontend integration issues.
+
+---
+
+# 12. Dashboard Data
+
+### Prompt
+
+```text
+Review my TaskMatrix dashboard data.
+
+The dashboard should show:
+
+- Total projects
+- Total tasks
+- Completed tasks
+- In-progress tasks
+- Recent tasks
+- Recent projects
+
+Check whether the frontend is using the correct task and project properties and MongoDB _id values.
+```
+
+### Purpose
+
+Used to debug dashboard counts, task/project data mapping, and React key warnings.
+
+---
+
+# 13. UI and Navigation Review
+
+### Prompt
+
+```text
+Review my existing TaskMatrix navigation and page flow.
+
+The main navigation should support:
+
+Dashboard
+Projects
+Tasks
+Profile
+Logout
+
+Projects should allow opening a project and then managing its tasks.
+
+Keep the existing design and avoid unnecessary UI redesign.
+```
+
+### Purpose
+
+Used to review navigation and make the Project → Task workflow easier to use.
+
+---
+
+# 14. Toast Notifications
+
+### Prompt
+
+```text
+I want to add simple success and error toast notifications to my existing TaskMatrix application.
+
+Use react-hot-toast.
+
+Show notifications for important actions such as:
+
 - Login
-- Register
+- Registration
 - Logout
-- Current-user verification
+- Project create/update/delete
+- Task create/update/delete
+- API errors
 
-The authentication state should be available to the application without creating a custom useAuth hook.
+Do not add notifications for every data-fetching request.
 ```
 
 ### Purpose
 
-Used to review global authentication-state management using React Context API.
+Used to add lightweight feedback for important user actions without changing the existing UI.
 
 ---
 
-# 11. Protected Frontend Routes
+# 15. Code Review and Debugging
 
 ### Prompt
 
 ```text
-Review React Router authentication logic for these routes:
+Review the specific code I provide from my TaskMatrix project.
 
-/login
-/register
-/dashboard
+Check for:
 
-Requirements:
-
-- Unauthenticated users should not access /dashboard.
-- Authenticated users should be redirected to /dashboard when accessing login/register.
-- Authentication should be checked when the application starts.
-- Avoid creating multiple BrowserRouter instances.
-```
-
-### Purpose
-
-Used to verify frontend route protection and authentication-based navigation.
-
----
-
-# 12. CORS Configuration
-
-### Prompt
-
-```text
-Help me configure Express CORS for a React frontend hosted separately from the backend.
-
-The application uses HttpOnly cookies, so credentials must be supported.
-
-The frontend URL should come from an environment variable instead of being hardcoded.
-```
-
-### Purpose
-
-Used while configuring local and production frontend-backend communication.
-
----
-
-# 13. Production Cookie Configuration
-
-### Prompt
-
-```text
-Explain the correct cookie configuration for JWT authentication when a React frontend and Express backend are deployed on different HTTPS domains.
-
-The authentication cookie should work securely in production while still allowing local development.
-```
-
-### Purpose
-
-Used to understand and configure secure cookie behavior for production.
-
----
-
-# 14. Environment Variables
-
-### Prompt
-
-```text
-Review the environment variable setup for a MERN application.
-
-The backend requires:
-
-- MONGO_URI
-- JWT_SECRET
-- CLIENT_URL
-- NODE_ENV
-- PORT
-
-The frontend requires:
-
-- VITE_API_URL
-
-Explain which variables should be kept secret and how local and production environments should be configured.
-```
-
-### Purpose
-
-Used to review environment-based configuration and prevent sensitive configuration from being hardcoded.
-
----
-
-# 15. Code Review
-
-### Prompt
-
-```text
-Review my implementation without rewriting the entire project.
-
-Check specifically for:
-
-- Authentication bugs
-- Incorrect API routes
-- JWT handling issues
-- Cookie configuration
-- CORS issues
-- React Router issues
+- API route mismatches
+- MongoDB/Mongoose issues
+- Authentication problems
+- Incorrect IDs
+- React state issues
 - Context API issues
-- Environment variable mistakes
+- Routing problems
 - Unnecessary code
 
-Explain the problem and suggest the smallest practical correction.
+Explain the problem first and then provide the smallest practical fix.
+
+Do not rewrite unrelated parts of the project.
 ```
 
 ### Purpose
 
-Used for targeted code review and debugging instead of generating the entire application.
+This was one of the main ways AI assistance was used during development: targeted debugging and code review of specific issues rather than generating the complete application.
 
 ---
 
-# 16. README Documentation
+# 16. Documentation
 
 ### Prompt
 
 ```text
-Create professional README documentation for my TaskMatrix Sprint 14 project.
+Update the TaskMatrix documentation according to the features that are actually implemented.
 
-The documentation should describe:
+Include the current Project CRUD, Task CRUD, authentication, dashboard, notifications, project-task relationship, API endpoints, setup instructions, and sprint outcome.
 
-- Project overview
-- Sprint objective
-- Features implemented
-- Tech stack
-- Project structure
-- Authentication flow
-- API endpoints
-- Environment variables
-- Local setup
-- Deployment
-- Live demo
-- GitHub repository
-- Sprint outcome
-
-Keep the documentation consistent with the actual implementation.
+Do not document features as completed if they are only planned.
 ```
 
 ### Purpose
 
-Used to organize and document the completed Sprint 14 implementation.
+Used to keep the README consistent with the actual implementation.
 
 ---
 
 # 17. AI Usage Philosophy
 
-AI tools were used as a supporting development resource, similar to technical documentation, debugging assistance, and code review.
+AI tools were used as a supporting development resource rather than as the primary source of the project implementation.
 
-The following principles were followed:
+The main use cases were:
 
-* I first understood the requirement before implementing it.
-* AI suggestions were reviewed before use.
-* Generated code was adapted to the existing project structure.
-* Errors were investigated and fixed based on the actual application behavior.
-* Unnecessary generated functionality was not added.
-* Security-related suggestions were reviewed carefully.
-* Final implementation and integration were tested in the application.
+- Understanding requirements
+- Debugging specific errors
+- Reviewing code
+- Checking API and route issues
+- Understanding technical concepts
+- Improving documentation
+- Getting implementation guidance when stuck
+
+The project was not built by simply generating the complete application with AI. Code suggestions were reviewed, modified where necessary, integrated into the existing codebase, and tested locally.
+
+The overall architecture, feature selection, coding workflow, integration, testing, debugging, and final implementation decisions were handled as part of my own development process.
 
 ---
 
 # 18. Key Learning Outcomes
 
-Through the development of Sprint 14, I strengthened my understanding of:
+Through the development of TaskMatrix, I strengthened my understanding of:
 
-* MERN application architecture
-* REST API development
-* MongoDB and Mongoose
-* Password hashing with bcrypt
-* JWT authentication
-* HttpOnly cookies
-* Express middleware
-* React Context API
-* Protected routes
-* Axios API integration
-* CORS and credentials
-* Environment variables
-* Vercel deployment
-* Render deployment
-* Production debugging
-* Git and GitHub workflow
+- MERN application architecture
+- REST API development
+- MongoDB and Mongoose
+- CRUD operations
+- JWT authentication
+- HttpOnly cookies
+- Express middleware
+- React Context API
+- React Router
+- Axios API integration
+- Project and Task data relationships
+- Protected API routes
+- CORS and credentials
+- Environment variables
+- Error handling
+- Toast notifications
+- Git and GitHub workflow
+- Deployment and production debugging
 
 ---
 
 # 19. Development Ownership
 
-The TaskMatrix project was developed as a hands-on implementation project.
+TaskMatrix was developed as a hands-on full-stack implementation project.
 
 AI assistance was mainly used for:
 
-* Debugging
-* Technical reference
-* Code review
-* Error analysis
-* Documentation support
-* Understanding deployment issues
+- Debugging
+- Technical reference
+- Code review
+- Error analysis
+- Understanding implementation approaches
+- Documentation support
 
-The application architecture, feature scope, project integration, testing, debugging, and final implementation decisions were reviewed and handled as part of the development process.
+The actual application structure, feature scope, coding, frontend-backend integration, database usage, testing, debugging, and final implementation decisions were part of my development work.
 
 ---
 
-## Conclusion
+# Conclusion
 
-Prompts in this document represent the major areas where AI assistance was used during Sprint 14.
+This document records the major areas where AI assistance was used during TaskMatrix development.
 
-The purpose of maintaining this file is to keep the development process transparent and document how AI-assisted development was incorporated into the project while maintaining developer ownership of the implementation.
-
-```
-
+The purpose is to maintain transparency about AI-assisted development while accurately representing the level of AI involvement. AI was primarily used as a development assistant for specific problems and reviews, while the project implementation and final decisions remained under my ownership.
