@@ -128,6 +128,15 @@ const Dashboard = () => {
     }
   }
 
+  const currentHour = new Date().getHours()
+
+  let greeting = 'Good Morning'
+
+  if (currentHour >= 12 && currentHour < 17) {
+    greeting = 'Good Afternoon'
+  } else if (currentHour >= 17) {
+    greeting = 'Good Evening'
+  }
   // =========================
   // DASHBOARD
   // =========================
@@ -144,7 +153,7 @@ const Dashboard = () => {
             <p className="text-sm text-slate-500 mb-1">Welcome back 👋</p>
 
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight capitalize">
-              Good Morning, {userName}
+              {greeting}, {userName}
             </h1>
 
             <p className="text-slate-500 mt-2">
