@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 export const authMiddleware = (req, res, next) => {
   try {
-    console.log("Cookies:", req.cookies);
     const token = req.cookies?.token;
 
     if (!token || typeof token !== "string") {
@@ -13,9 +12,8 @@ export const authMiddleware = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decoded token", decoded)
     req.user = decoded.userId;
-  
+
     next();
   } catch (error) {
     console.error("Auth Middleware Error:", error);

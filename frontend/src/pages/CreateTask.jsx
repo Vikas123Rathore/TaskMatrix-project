@@ -6,6 +6,7 @@ import axios from 'axios'
 
 import { useTask } from '../context/TaskContext'
 import { useProject } from '../context/ProjectContext'
+import api from '../api/axios'
 
 const CreateTask = () => {
   const { id: projectId } = useParams()
@@ -88,8 +89,8 @@ const CreateTask = () => {
 
       console.log('AI Input:', aiInput)
 
-      const response = await axios.post(
-        'http://localhost:8080/api/ai/generate-task',
+      const response = await api.post(
+        '/ai/generate-task',
         {
           title: aiInput,
         },
@@ -143,7 +144,7 @@ const CreateTask = () => {
 
       console.log('Task Created Successfully')
 
-      toast.success('Task created successfully')
+      // toast.success('Task created successfully')
 
       navigate(`/projects/${projectId}`)
     } catch (error) {

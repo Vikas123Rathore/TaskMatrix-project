@@ -35,13 +35,7 @@ const Tasks = () => {
             </p>
           </div>
 
-          {/* <button
-            onClick={() => navigate('/tasks/create')}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
-          >
-            <Plus className="w-4 h-4" />
-            Create Task
-          </button> */}
+         
         </div>
 
         {/* Search UI */}

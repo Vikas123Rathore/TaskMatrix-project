@@ -4,22 +4,19 @@ import { useNavigate } from 'react-router-dom'
 import { useProject } from '../context/ProjectContext'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
+import api from '../api/axios'
 
 const CreateProject = () => {
   const navigate = useNavigate()
   const { loading, createProject } = useProject()
 
-  // ==============================
   // AI STATES
-  // ==============================
 
   const [aiInput, setAiInput] = useState('')
   const [aiResponse, setAiResponse] = useState(null)
   const [aiLoading, setAiLoading] = useState(false)
 
-  // ==============================
   // PROJECT FORM
-  // ==============================
 
   const [formData, setFormData] = useState({
     projectName: '',
@@ -27,9 +24,7 @@ const CreateProject = () => {
     status: 'Pending',
   })
 
-  // ==============================
   // HANDLE INPUT CHANGE
-  // ==============================
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -40,10 +35,8 @@ const CreateProject = () => {
     }))
   }
 
-  // ==============================
   // GENERATE PROJECT DESCRIPTION
   // WITH AI
-  // ==============================
 
   const generateWithAI = async () => {
     if (!aiInput.trim()) {
@@ -56,8 +49,8 @@ const CreateProject = () => {
 
       console.log('Sending project name to AI:', aiInput)
 
-      const response = await axios.post(
-        'http://localhost:8080/api/ai/generate-project',
+      const response = await api.post(
+        '/ai/generate-project',
         {
           projectName: aiInput,
         },
@@ -74,7 +67,7 @@ const CreateProject = () => {
 
       setAiResponse(result)
 
-      toast.success('Project description generated')
+      // toast.success('Project description generated')
     } catch (error) {
       console.error('AI Frontend Error:', error)
 
@@ -87,9 +80,7 @@ const CreateProject = () => {
     }
   }
 
-  // ==============================
   // CREATE PROJECT
-  // ==============================
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -120,9 +111,7 @@ const CreateProject = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
-      {/* ==============================
-          BACK BUTTON
-      ============================== */}
+      {/* BACK BUTTON */}
 
       <button
         onClick={() => navigate('/projects')}

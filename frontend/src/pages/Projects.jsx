@@ -30,7 +30,10 @@ const Projects = () => {
         </div>
 
         {/* Create Project Button */}
-        <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition cursor-pointer">
+        <button
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition cursor-pointer"
+          onClick={() => navigate('/projects/create')}
+        >
           <Plus size={18} />
           Create Project
         </button>
