@@ -10,6 +10,7 @@ import userRouter from "./routes/userRoute.js";
 // import taskRouter from "./routes/taskRoute.js";
 import projectRouter from "./routes/projectRoute.js";
 import taskRouter from "./routes/taskRouter.js";
+import aiRouter from "./routes/aiRouter.js";
 const app = express();
 
 // Middleware
@@ -35,6 +36,7 @@ app.use("/api/auth", userRouter);
 // app.use("/api/tasks", taskRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/tasks", taskRouter);
+app.use("/api/ai", aiRouter); 
 const PORT = process.env.PORT || 8000;
 
 const startServer = async () => {
