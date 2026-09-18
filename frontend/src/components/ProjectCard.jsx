@@ -1,8 +1,16 @@
 import { useProject } from '../context/ProjectContext'
 import { useNavigate } from 'react-router-dom'
+import { useTask } from '../context/TaskContext'
+
 const ProjectCard = ({ project }) => {
   const { getProject } = useProject()
   const navigate = useNavigate()
+  const { tasks } = useTask()
+
+  const projectTasks = tasks.filter(
+    (task) => task.project === project._id || task.project?._id === project._id,
+  )
+
   const viewProject = async () => {
     try {
       await getProject(project._id)
@@ -27,10 +35,10 @@ const ProjectCard = ({ project }) => {
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-semibold text-slate-900">
-            {project.projectName}{' '}
+            {project.projectName}
           </h3>
 
-          <p className="text-sm text-slate-500 mt-1">{project.description} </p>
+          <p className="text-sm text-slate-500 mt-1">{project.description}</p>
         </div>
 
         {/* More Button */}
@@ -43,7 +51,7 @@ const ProjectCard = ({ project }) => {
       <div className="mt-5">
         <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
           <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-          {project.status}{' '}
+          {project.status}
         </span>
       </div>
 
@@ -51,11 +59,15 @@ const ProjectCard = ({ project }) => {
       <div className="mt-5 flex items-center justify-between text-sm">
         <div>
           <p className="text-slate-400">Tasks</p>
-          <p className="font-semibold text-slate-800 mt-1">8 Tasks</p>
+
+          <p className="font-semibold text-slate-800 mt-1">
+            {projectTasks.length} Tasks
+          </p>
         </div>
 
         <div>
           <p className="text-slate-400">Created</p>
+
           <p className="font-semibold text-slate-800 mt-1">
             {project.createdAt
               ? new Date(project.createdAt).toLocaleDateString('en-US', {
@@ -64,15 +76,15 @@ const ProjectCard = ({ project }) => {
                   year: 'numeric',
                 })
               : 'N/A'}
-          </p>{' '}
+          </p>
         </div>
       </div>
 
       {/* Progress */}
-      {/* Progress */}
       <div className="mt-5">
         <div className="flex justify-between text-xs mb-2">
           <span className="text-slate-500">Progress</span>
+
           <span className="font-medium text-slate-700">
             {project.status === 'Pending'
               ? '0%'

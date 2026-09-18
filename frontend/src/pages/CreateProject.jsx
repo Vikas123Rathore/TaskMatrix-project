@@ -60,6 +60,7 @@ const CreateProject = () => {
       )
 
       console.log('AI API Response:', response.data)
+      console.log('AI API Response:', response)
 
       const result = JSON.parse(response.data.response)
 
@@ -67,7 +68,7 @@ const CreateProject = () => {
 
       setAiResponse(result)
 
-      // toast.success('Project description generated')
+      toast.success('Project description generated')
     } catch (error) {
       console.error('AI Frontend Error:', error)
 
@@ -86,13 +87,8 @@ const CreateProject = () => {
     e.preventDefault()
 
     try {
-      console.log('Project Data:', formData)
 
       await createProject(formData)
-
-      console.log('Project Created Successfully')
-
-      toast.success('Project created successfully')
 
       setFormData({
         projectName: '',

@@ -61,26 +61,37 @@ const Dashboard = () => {
   const projectList = Array.isArray(projects) ? projects : []
   const taskList = Array.isArray(tasks) ? tasks : []
 
+  // Total projects
+  const totalProjects = projectList.length
+
   // =========================
   // PROJECT ANALYTICS
   // =========================
 
+  const pendingProjects = projectList.filter(
+    (project) => project.status === 'Pending',
+  ).length
+
+  const inProgressProjects = projectList.filter(
+    (project) => project.status === 'In Progress',
+  ).length
+
+  const completedProjects = projectList.filter(
+    (project) => project.status === 'Completed',
+  ).length
+
   const projectAnalytics = [
     {
       status: 'Pending',
-      projects: projectList.filter((project) => project.status === 'Pending')
-        .length,
+      projects: pendingProjects,
     },
     {
       status: 'In Progress',
-      projects: projectList.filter(
-        (project) => project.status === 'In Progress',
-      ).length,
+      projects: inProgressProjects,
     },
     {
       status: 'Completed',
-      projects: projectList.filter((project) => project.status === 'Completed')
-        .length,
+      projects: completedProjects,
     },
   ]
 
@@ -128,6 +139,10 @@ const Dashboard = () => {
     }
   }
 
+  // =========================
+  // GREETING
+  // =========================
+
   const currentHour = new Date().getHours()
 
   let greeting = 'Good Morning'
@@ -137,6 +152,7 @@ const Dashboard = () => {
   } else if (currentHour >= 17) {
     greeting = 'Good Evening'
   }
+
   // =========================
   // DASHBOARD
   // =========================
@@ -196,7 +212,10 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Projects */}
 
-            <div className="border border-slate-200 rounded-xl p-5 hover:border-blue-200 hover:shadow-sm transition">
+            <div
+              onClick={() => navigate('/projects')}
+              className="border border-slate-200 rounded-xl p-5 hover:border-blue-200 hover:shadow-sm transition cursor-pointer"
+            >
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
                   <FolderKanban className="w-5 h-5 text-blue-600" />
@@ -206,7 +225,7 @@ const Dashboard = () => {
               <p className="text-sm text-slate-500 mt-4">Projects</p>
 
               <p className="text-3xl font-bold text-slate-900 mt-1">
-                {projectList.length}
+                {totalProjects}
               </p>
             </div>
 
@@ -429,8 +448,6 @@ const Dashboard = () => {
         {/* ================================================= */}
 
         <section className="bg-white border border-slate-200 rounded-2xl shadow-sm">
-          {/* Header */}
-
           <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
             <div>
               <h2 className="text-lg font-semibold">Recent Tasks</h2>
@@ -448,8 +465,6 @@ const Dashboard = () => {
               <ArrowRight size={16} />
             </button>
           </div>
-
-          {/* Task List */}
 
           <div className="divide-y divide-slate-100">
             {recentTasks.length > 0 ? (
@@ -474,8 +489,6 @@ const Dashboard = () => {
                     <p className="text-xs text-slate-400 mt-1 truncate">
                       {task.description || 'No description available'}
                     </p>
-
-                    {/* Project Name */}
 
                     <p className="text-xs text-slate-400 mt-1">
                       Project: {task.project?.projectName || 'No project'}
